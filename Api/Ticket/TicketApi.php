@@ -15,6 +15,59 @@
             echo json_encode($datos);
         break;
 
+        case "InsertTicket":
+            try{
+                $datos = $ticket->insertTicket
+                ($body["idReporte"],
+                $body["idEmpleado"],
+                $body["descripcion"]
+            );
+                if ($datos){
+                    echo json_encode("Registro insertado de manera correcta");
+                }else{
+                    $items []= array("estado" => "ERROR", "mensaje"=>"Ha ocurrido un error al insertar el registro! Por favor verificalo o revisa tu solicitud");
+                    echo json_encode($items);
+                }
+            }catch(Exception $e){
+                $items []= array("estado" => "ERROR",
+                "mensaje"=>"Ha ocurrido un error al insertar el registro!  Por favor verificalo con un administrador o revisa tu solicitud",
+                "excepción" =>$e);
+                echo json_encode($items);   
+            }
+        break;
+
+        case "UpdateTicket":
+
+            try{
+                $data = $ticket->findTicket($body["idTicket"]);
+                if (empty($data)){
+                    $items []= array("estado" => "ERROR", "mensaje"=>"Ha ocurrido un error al encontrar el registro! Este Empleado no esta registrado");
+                    echo json_encode($items);
+                }else{
+                    $datos = $ticket->updateTicket(
+                        $body["idTicket"],
+                        $body["idReporte"],
+                        $body["idEmpleado"],
+                        $body["descripcion"]
+                    );
+                    if ($datos){
+                        echo json_encode("Registro actualizado de manera correcta");
+                    }else{
+                        $items []= array("estado" => "ERROR", "mensaje"=>"Ha ocurrido un error al actualizar el registro! Por favor verificalo o revisa tu solicitud");
+                        echo json_encode($items);
+                    }
+                    
+                }
+
+            }catch(Exception $e){
+                $items []= array("estado" => "ERROR",
+                "mensaje"=>"Ha ocurrido un error al actualizar el registro!  Por favor verificalo con un administrador o revisa tu solicitud",
+                "excepción" =>$e);
+                echo json_encode($items);   
+            }
+
+        break;
+
         case "FindTicket":
             try{
                 if ($body["idTicket"]){
