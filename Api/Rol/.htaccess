@@ -1,0 +1,10 @@
+Options +FollowSymLinks -MultiViews
+
+RewriteEngine on
+
+RewriteCond %{HTTP_REFERER} buttons-for-website\.com [NC,OR]
+
+RewriteCond %{HTTP_REFERER} darodar\.com [NC,OR]
+
+RewriteRule ^([a-zA-Z_-]*)$ RolApi.php?op=$1
+

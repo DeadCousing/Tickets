@@ -20,31 +20,35 @@ class Domicilios extends Conectar {
         return $resultado=$sql->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function insertDomicilios($descripcion,$domicilio,$colonia,$cp,$telExt,$correo,$ubicacionMaps,$cruces,$idCliente,$idContacto) {
+    public function insertDomicilios($descripcion,$calle,$numeroInt,$numeroExt,$colonia,$cp,$telExt,$correo,$ubicacionMaps,$cruces,$idCliente,$idContacto) {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "INSERT Into Direccion(descripcion,domicilio,colonia,cp,telExt,correo,ubicacionMaps,cruces,estatus,idCliente,idContacto) values(?,?,?,?,?,?,?,?,1,?,?);;"; 
+        $sql = "INSERT Into Direccion(descripcion,calle,numeroInt,numeroExt,colonia,cp,telExt,correo,ubicacionMaps,cruces,estatus,idCliente,idContacto) values(?,?,?,?,?,?,?,?,1,?,?);;"; 
         $sql = $conectar->prepare($sql);
         $sql->bindValue(1,$descripcion);
-        $sql->bindValue(2,$domicilio);
-        $sql->bindValue(3,$colonia);
-        $sql->bindValue(4,$cp);
-        $sql->bindValue(5,$telExt);
-        $sql->bindValue(6,$correo);
-        $sql->bindValue(7,$ubicacionMaps);
-        $sql->bindValue(8,$cruces);
-        $sql->bindValue(9,$idCliente);
-        $sql->bindValue(10,$idContacto);
+        $sql->bindValue(2,$calle);
+        $sql->bindValue(3,$numeroInt);
+        $sql->bindValue(4,$numeroExt);
+        $sql->bindValue(5,$colonia);
+        $sql->bindValue(6,$cp);
+        $sql->bindValue(7,$telExt);
+        $sql->bindValue(8,$correo);
+        $sql->bindValue(9,$ubicacionMaps);
+        $sql->bindValue(10,$cruces);
+        $sql->bindValue(11,$idCliente);
+        $sql->bindValue(12,$idContacto);
         $sql->execute();
         return true;
     }
 
-    public function updateDomicilios($idDireccion,$descripcion,$domicilio,$colonia,$cp,$telExt,$correo,$ubicacionMaps,$cruces) {
+    public function updateDomicilios($idDireccion,$descripcion,$calle,$numeroInt,$numeroExt,$colonia,$cp,$telExt,$correo,$ubicacionMaps,$cruces) {
         $conectar = parent::conexion();
         parent::set_names();
         $sql = "UPDATE Direccion set
         descripcion = ?,
-        domicilio = ?,
+        calle = ?,
+        numeroInt = ?,
+        numeroExt = ?,
         colonia = ?,
         cp = ?,
         telExt= ?,
@@ -54,14 +58,16 @@ class Domicilios extends Conectar {
         where idDireccion = ?;";
         $sql = $conectar->prepare($sql);
         $sql->bindValue(1,$descripcion);
-        $sql->bindValue(2,$domicilio);
-        $sql->bindValue(3,$colonia);
-        $sql->bindValue(4,$cp);
-        $sql->bindValue(5,$telExt);
-        $sql->bindValue(6,$correo);
-        $sql->bindValue(7,$ubicacionMaps);
-        $sql->bindValue(8,$cruces);
-        $sql->bindValue(9,$idDireccion);
+        $sql->bindValue(2,$calle);
+        $sql->bindValue(3,$numeroInt);
+        $sql->bindValue(4,$numeroExt);
+        $sql->bindValue(5,$colonia);
+        $sql->bindValue(6,$cp);
+        $sql->bindValue(7,$telExt);
+        $sql->bindValue(8,$correo);
+        $sql->bindValue(9,$ubicacionMaps);
+        $sql->bindValue(10,$cruces);
+        $sql->bindValue(11,$idDireccion);
         $sql->execute();
         return true;
     }

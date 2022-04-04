@@ -2,30 +2,24 @@
 
     header('Content-Type: application/json');
 
-
-    require_once("../config/conexion.php");
-    require_once("../models/Contacto.php");
+    require_once("../../config/conexion.php");
+    require_once("../../models/Rol.php");
 
     $body = json_decode(file_get_contents("php://input"), true);
 
-    $contacto = new Contacto();
+    $rol= new Rol();
 
-    switch($_GET["op"]){
+    switch ($_GET["op"]){
 
-        case "GetAllContacto":
-            $datos = $contacto->getOnlyContacto();
-            echo json_encode($datos);
-        break;
-        
-        case "GetContactoCliente":
-            $datos = $contacto->getContactosCliente();
+        case "GetRol":
+            $datos = $rol->getRol();
             echo json_encode($datos);
         break;
 
-        case "FindContacto":
+        case "FinRol":
             try{
-                if ($body["idClientes"]){
-                    $datos = $contacto->findConctactoCliente($body["idClientes"]);
+                if ($body["idRol"]){
+                    $datos = $rol->finRol($body["idRol"]);
                     if (empty($datos)){
                         $items []= array("estado" => "ERROR", "mensaje"=>"Ha ocurrido un error al buscar el registro! Por favor verificalo o revisa tu solicitud");
                         echo json_encode($items);
@@ -41,16 +35,15 @@
                 "excepción" =>$e);
                 echo json_encode($items);
             }
+
         break;
 
-        case "InsertContacto":
+        
+        case "InsertRol":
             try{
-                $datos = $contacto->insertContactos(
-                $body["puesto"],
-                $body["nombre"],
-                $body["correo"],
-                $body["telefono"],
-                $body["idCliente"],
+                $datos = $rol->insertRol
+                ($body["nombre"],
+                $body["descripcion"]
             );
                 if ($datos){
                     echo json_encode("Registro insertado de manera correcta");
@@ -66,20 +59,18 @@
             }
         break;
 
-        case "UpdateContacto":
+        case "UpdateRol":
 
             try{
-                $data = $contacto->validarContacto($body["idContacto"]);
+                $data = $rol->finRol($body["idRol"]);
                 if (empty($data)){
-                    $items []= array("estado" => "ERROR", "mensaje"=>"Ha ocurrido un error al encontrar el registro! Este cliente no esta registrado");
+                    $items []= array("estado" => "ERROR", "mensaje"=>"Ha ocurrido un error al encontrar el registro! Este Empleado no esta registrado");
                     echo json_encode($items);
                 }else{
-                    $datos = $contacto->updateContactos(
-                        $body["idContacto"],
-                        $body["puesto"],
+                    $datos = $rol->updateRol(
+                        $body["idRol"],
                         $body["nombre"],
-                        $body["correo"],
-                        $body["telefono"]
+                        $body["descripcion"]
                     );
                     if ($datos){
                         echo json_encode("Registro actualizado de manera correcta");
@@ -99,21 +90,21 @@
 
         break;
 
-        case "DeactivateContacto":
+        case "DeleteRol":
 
             try{
-                $data = $contacto->validarContacto($body["idContacto"]);
+                $data = $rol->finRol($body["idRol"]);
                 if (empty($data)){
-                    $items []= array("estado" => "ERROR", "mensaje"=>"Ha ocurrido un error al encontrar el registro! Este cliente no esta registrado");
+                    $items []= array("estado" => "ERROR", "mensaje"=>"Ha ocurrido un error al encontrar el registro! Este Empleado no esta registrado");
                     echo json_encode($items);
                 }else{
-                    $datos = $contacto->deactivateContactos(
-                        $body["idContacto"]
+                    $datos = $rol->deleteRol(
+                        $body["idRol"]
                     );
                     if ($datos){
-                        echo json_encode("Registro desactivado de manera correcta");
+                        echo json_encode("Registro eliminado de manera correcta");
                     }else{
-                        $items []= array("estado" => "ERROR", "mensaje"=>"Ha ocurrido un error al desactivar el registro! Por favor verificalo o revisa tu solicitud");
+                        $items []= array("estado" => "ERROR", "mensaje"=>"Ha ocurrido un error al eliminar el registro! Por favor verificalo o revisa tu solicitud");
                         echo json_encode($items);
                     }
                     
@@ -121,36 +112,7 @@
 
             }catch(Exception $e){
                 $items []= array("estado" => "ERROR",
-                "mensaje"=>"Ha ocurrido un error al desactivar el registro!  Por favor verificalo con un administrador o revisa tu solicitud",
-                "excepción" =>$e);
-                echo json_encode($items);   
-            }
-
-        break;
-
-        case "ActivateContacto":
-
-            try{
-                $data = $contacto->validarContacto($body["idContacto"]);
-                if (empty($data)){
-                    $items []= array("estado" => "ERROR", "mensaje"=>"Ha ocurrido un error al encontrar el registro! Este cliente no esta registrado");
-                    echo json_encode($items);
-                }else{
-                    $datos = $contacto->activateContactos(
-                        $body["idContacto"]
-                    );
-                    if ($datos){
-                        echo json_encode("Registro activado de manera correcta");
-                    }else{
-                        $items []= array("estado" => "ERROR", "mensaje"=>"Ha ocurrido un error al activar el registro! Por favor verificalo o revisa tu solicitud");
-                        echo json_encode($items);
-                    }
-                    
-                }
-
-            }catch(Exception $e){
-                $items []= array("estado" => "ERROR",
-                "mensaje"=>"Ha ocurrido un error al activar el registro!  Por favor verificalo con un administrador o revisa tu solicitud",
+                "mensaje"=>"Ha ocurrido un error al eliminar el registro!  Por favor verificalo con un administrador o revisa tu solicitud",
                 "excepción" =>$e);
                 echo json_encode($items);   
             }
@@ -158,6 +120,4 @@
         break;
 
     }
-
-
 ?>

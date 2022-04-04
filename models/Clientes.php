@@ -20,14 +20,15 @@ class Clientes extends Conectar {
         return $resultado=$sql->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function insertClientes($rfc,$razonSocial,$nombre) {
+    public function insertClientes($rfc,$razonSocial,$nombre,$idUsuario) {
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "INSERT Into Cliente(rfc,razonsocial,nombre,estatus) VALUES (?,?,?,1);"; 
+        $sql = "INSERT Into Cliente(rfc,razonsocial,nombre,estatus) VALUES (?,?,?,1,?);"; 
         $sql = $conectar->prepare($sql);
         $sql->bindValue(1,$rfc);
         $sql->bindValue(2,$razonSocial);
         $sql->bindValue(3,$nombre);
+        $sql->bindValue(4,$idUsuario);
         $sql->execute();
         return true;
     }

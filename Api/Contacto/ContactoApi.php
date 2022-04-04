@@ -3,28 +3,29 @@
     header('Content-Type: application/json');
 
 
-    require_once("../config/conexion.php");
-    require_once("../models/Direcciones.php");
+    require_once("../../config/conexion.php");
+    require_once("../../models/Contacto.php");
 
     $body = json_decode(file_get_contents("php://input"), true);
 
-    $Direcciones = new Domicilios();
+    $contacto = new Contacto();
 
     switch($_GET["op"]){
-        case "GetAllDomicilio":
-            $datos = $Direcciones->getDomicilios();
+
+        case "GetAllContacto":
+            $datos = $contacto->getOnlyContacto();
             echo json_encode($datos);
         break;
         
-        case "GetDomicilioCliente":
-            $datos = $Direcciones->getallDOmiciliosCliente();
+        case "GetContactoCliente":
+            $datos = $contacto->getContactosCliente();
             echo json_encode($datos);
         break;
 
-        case "FindDomicilio":
+        case "FindContacto":
             try{
-                if ($body["idDomicilio"]){
-                    $datos = $Direcciones->findDomicilio($body["idClientes"]);
+                if ($body["idClientes"]){
+                    $datos = $contacto->findConctactoCliente($body["idClientes"]);
                     if (empty($datos)){
                         $items []= array("estado" => "ERROR", "mensaje"=>"Ha ocurrido un error al buscar el registro! Por favor verificalo o revisa tu solicitud");
                         echo json_encode($items);
@@ -42,19 +43,14 @@
             }
         break;
 
-        case "InsertDomicilio":
+        case "InsertContacto":
             try{
-                $datos = $Direcciones->insertDomicilios(
-                $body["descripcion"],
-                $body["domicilio"],
-                $body["colonia"],
-                $body["cp"],
-                $body["telExt"],
+                $datos = $contacto->insertContactos(
+                $body["puesto"],
+                $body["nombre"],
                 $body["correo"],
-                $body["ubicacionMaps"],
-                $body["cruces"],
+                $body["telefono"],
                 $body["idCliente"],
-                $body["idContacto"],
             );
                 if ($datos){
                     echo json_encode("Registro insertado de manera correcta");
@@ -70,24 +66,20 @@
             }
         break;
 
-        case "UpdateDomicilio":
+        case "UpdateContacto":
 
             try{
-                $data = $Direcciones->findDomicilio($body["idContacto"]);
+                $data = $contacto->validarContacto($body["idContacto"]);
                 if (empty($data)){
                     $items []= array("estado" => "ERROR", "mensaje"=>"Ha ocurrido un error al encontrar el registro! Este cliente no esta registrado");
                     echo json_encode($items);
                 }else{
-                    $datos = $Direcciones->updateDomicilios(
-                        $body["idDireccion"],
-                        $body["descripcion"],
-                        $body["domicilio"],
-                        $body["colonia"],
-                        $body["cp"],
-                        $body["telExt"],
+                    $datos = $contacto->updateContactos(
+                        $body["idContacto"],
+                        $body["puesto"],
+                        $body["nombre"],
                         $body["correo"],
-                        $body["ubicacionMaps"],
-                        $body["cruces"],
+                        $body["telefono"]
                     );
                     if ($datos){
                         echo json_encode("Registro actualizado de manera correcta");
@@ -107,16 +99,16 @@
 
         break;
 
-        case "DeactivateDomicilio":
+        case "DeactivateContacto":
 
             try{
-                $data = $Direcciones->findDomicilio($body["idDireccion"]);
+                $data = $contacto->validarContacto($body["idContacto"]);
                 if (empty($data)){
                     $items []= array("estado" => "ERROR", "mensaje"=>"Ha ocurrido un error al encontrar el registro! Este cliente no esta registrado");
                     echo json_encode($items);
                 }else{
-                    $datos = $Direcciones->deactivateDomicilio(
-                        $body["idDireccion"]
+                    $datos = $contacto->deactivateContactos(
+                        $body["idContacto"]
                     );
                     if ($datos){
                         echo json_encode("Registro desactivado de manera correcta");
@@ -136,16 +128,16 @@
 
         break;
 
-        case "ActivateDomicilio":
+        case "ActivateContacto":
 
             try{
-                $data = $Direcciones->activateDomicilio($body["idDireccion"]);
+                $data = $contacto->validarContacto($body["idContacto"]);
                 if (empty($data)){
                     $items []= array("estado" => "ERROR", "mensaje"=>"Ha ocurrido un error al encontrar el registro! Este cliente no esta registrado");
                     echo json_encode($items);
                 }else{
-                    $datos = $Direcciones->activateContactos(
-                        $body["idDireccion"]
+                    $datos = $contacto->activateContactos(
+                        $body["idContacto"]
                     );
                     if ($datos){
                         echo json_encode("Registro activado de manera correcta");
@@ -164,7 +156,8 @@
             }
 
         break;
-    
+
     }
+
 
 ?>
