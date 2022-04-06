@@ -49,7 +49,7 @@
 
         break;
 
-        case "InsertEquipo":
+        case "InsertReporte":
             try{
                 $resultados = $body["data"];
                 $array = json_decode(json_encode($resultados), true);
@@ -57,7 +57,6 @@
                 $datosReporte = $reporte->insertReporte
                 ($body["idDireccion"],
                 $body["idCliente"],
-                $body["fotoEvidencia"],
                 $body["fechaCreacion"]);
                 
                 if ($datosReporte){
@@ -134,7 +133,6 @@
                         $body["idReporte"],
                         $body["idDireccion"],
                         $body["idCliente"],
-                        $body["fotoEvidencia"],
                         $body["fechaCreacion"]
                     );
                     if ($datos){

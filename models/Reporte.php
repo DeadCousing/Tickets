@@ -20,34 +20,31 @@ class Reporte extends Conectar {
         return $resultado=$sql->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function insertReporte($idDireccion,$idCliente,$fotoEvidencia,$fechaCreacion){
+    public function insertReporte($idDireccion,$idCliente,$fechaCreacion){
         $conectar = parent::conexion();
         parent::set_names();
-        $sql = "INSERT INTO Reporte(idDireccion,idCliente,fotoEvidencia,fechaCreacion) VALUES (?,?,?,?,1);";
+        $sql = "INSERT INTO Reporte(idDireccion,idCliente,,fechaCreacion) VALUES (?,?,?,1);";
         $sql =$conectar->prepare($sql);
         $sql ->bindValue(1,$idDireccion);
         $sql ->bindValue(2,$idCliente);
-        $sql ->bindValue(3,$fotoEvidencia);
-        $sql ->bindValue(4,$fechaCreacion);
+        $sql ->bindValue(3,$fechaCreacion);
         $sql ->execute();
         return true;
     }
 
-    public function updateReporte($idReporte,$idDireccion,$idCliente,$fotoEvidencia,$fechaCreacion){
+    public function updateReporte($idReporte,$idDireccion,$idCliente,$fechaCreacion){
         $conectar = parent::conexion();
         parent::set_names();
         $sql = "UPDATE Reporte SET
         idDireccion = ?,
         idCliente = ?,
-        fotoEvidencia = ?,
         fechaCreacion = ?
         WHERE idReporte = ?;";
         $sql =$conectar->prepare($sql);
         $sql ->bindValue(1,$idDireccion);
         $sql ->bindValue(2,$idCliente);
-        $sql ->bindValue(3,$fotoEvidencia);
-        $sql ->bindValue(4,$fechaCreacion);
-        $sql ->bindValue(5,$idReporte);
+        $sql ->bindValue(3,$fechaCreacion);
+        $sql ->bindValue(4,$idReporte);
         $sql ->execute();
         return true;
     }
